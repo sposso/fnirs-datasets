@@ -63,7 +63,6 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
         (e.g. a template) do not give it. Each channel keeps its midpoint and direction; only its length changes.
     ``allow_2d``: accept flat 2D positions (rejected datasets, whose positions are kept as provided).
     """
-    n_channels_original = len(raw.ch_names)
     raw.drop_channels([ch for ch in raw.ch_names if ch.split(" ")[0] in drop_pairs])
     if fix_file_positions:
         set_optode_positions(raw.info, optode_xyz)
@@ -99,7 +98,6 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
     return {
         "data": data,
         "sfreq": haemo.info["sfreq"],
-        "n_channels_original": n_channels_original,
         "channel_xyz": channel_xyz,
         "sd_distances": sd_distances,
         "ch_names": [haemo.ch_names[p].split(" ")[0] for p in hbo],           # e.g. "S1_D1"
@@ -128,7 +126,6 @@ def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, l_freq=L_FREQ,
     return {
         "data": data,
         "sfreq": haemo.info["sfreq"],
-        "n_channels_original": 2 * n,
         "channel_xyz": channel_xyz,
         "sd_distances": np.asarray(sd_distances, dtype=float),
     }
