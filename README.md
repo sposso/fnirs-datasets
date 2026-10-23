@@ -53,12 +53,8 @@ git clone https://github.com/sposso/fnirs-datasets.git && cd fnirs-datasets
 pip install -r requirements.txt
 ```
 
-Some datasets need extra packages:
-- `mne-nirs`: the conversion scripts.
-- `mat-io`: the simulated flight dataset.
-- `rarfile`: two of the rejected datasets.
-
-These are listed in `requirements-optional.txt`.
+Three packages are needed only for specific parts (`mne-nirs` for the conversion scripts, `mat-io` for the
+simulated flight dataset, `rarfile` for two rejected datasets); they are included in `requirements.txt`.
 
 ## Getting the data
 

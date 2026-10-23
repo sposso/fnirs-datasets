@@ -4,3 +4,6 @@ pandas>=2.2
 h5py>=3.11
 mne>=1.11
 mne-bids>=0.18
+mne-nirs>=0.7      # scripts/ (SNIRF writing)
+mat-io             # loaders/load_flight_data.py (MATLAB MCOS objects)
+rarfile>=4.2       # rejected/load_deception_data.py, rejected/load_stroop_block_data.py
