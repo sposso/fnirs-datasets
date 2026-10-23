@@ -1,0 +1,3 @@
+mne-nirs>=0.7      # scripts/ (SNIRF writing)
+mat-io             # loaders/load_flight_data.py (MATLAB MCOS objects)
+rarfile>=4.2       # rejected/load_deception_data.py, rejected/load_stroop_block_data.py

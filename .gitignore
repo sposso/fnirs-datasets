@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+data/
+*.zip
+*.rar
+*.snirf
+*.nirs
+.ipynb_checkpoints/
+.DS_Store

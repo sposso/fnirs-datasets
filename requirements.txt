@@ -1,0 +1,6 @@
+numpy>=2.0
+scipy>=1.13
+pandas>=2.2
+h5py>=3.11
+mne>=1.11
+mne-bids>=0.18
