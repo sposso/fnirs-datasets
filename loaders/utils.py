@@ -105,16 +105,18 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
     }
 
 
-def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, l_freq=L_FREQ,
+def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, events=(), l_freq=L_FREQ,
                  target_sfreq=TARGET_SFREQ, verbose=False):
     """Build a record from HbO and HbR already computed by the device software, shaped (C, T) each, in M.
 
     For datasets that share no raw intensity. Only the high-pass and resampling of
     ``snirf_to_record`` are applied; ``channel_xyz`` (metres) and ``sd_distances`` (metres) are given
-    (``channel_xyz`` is None for rejected datasets that provide no positions).
+    (``channel_xyz`` is None for rejected datasets that provide no positions). ``ch_names`` defaults to
+    CH1..CHn and ``events`` to none; both are returned as in ``raw_to_record``.
     """
     n = len(hbo)
-    names = [f"CH{i + 1} hbo" for i in range(n)] + [f"CH{i + 1} hbr" for i in range(n)]
+    ch_names = [f"CH{i + 1}" for i in range(n)] if ch_names is None else list(ch_names)
+    names = [f"{c} hbo" for c in ch_names] + [f"{c} hbr" for c in ch_names]
     info = mne.create_info(names, sfreq, ["hbo"] * n + ["hbr"] * n)
     haemo = mne.io.RawArray(np.concatenate([hbo, hbr]), info, verbose=verbose)
     highpass_and_resample(haemo, l_freq, target_sfreq, verbose)
@@ -128,6 +130,8 @@ def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, l_freq=L_FREQ,
         "sfreq": haemo.info["sfreq"],
         "channel_xyz": channel_xyz,
         "sd_distances": np.asarray(sd_distances, dtype=float),
+        "ch_names": ch_names,
+        "events": [(float(onset), str(name)) for onset, name in events],  # (onset s, name)
     }
 
 

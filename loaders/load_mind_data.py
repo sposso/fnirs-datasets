@@ -14,6 +14,7 @@ channels.tsv (the vendor's order). Channel 25 is listed as S8-D10 (71 mm), but t
 the mirror of S5-D3), which is used. Two recordings have two channels without data (all zero), which are dropped.
 Each optode lies exactly midway between two electrodes of the authors' 10-20 cap layout (sub-*_electrodes.tsv), i.e. on
 a 10-5 position, and gets the MNI position of that position on the NIRx ICBM152 template.
+Events (rest, MI start, the four MI directions) are read from the SNIRF stim groups, present in every file.
 """
 
 from pathlib import Path
@@ -61,6 +62,17 @@ def read_channels(path):
     return [FIXED_PAIRS.get((s, d), (s, d)) for s, d in zip(table.source, table.detector)]
 
 
+def read_stim(nirs):
+    """(onset s, name) of every stimulus in the SNIRF ``stim*`` groups, in time order (same content as the
+    BIDS events.tsv, which is missing for sub-17 to sub-30)."""
+    events = []
+    for key in (k for k in nirs if k.startswith("stim")):
+        name = np.asarray(nirs[key]["name"][()]).ravel()[0]
+        name = name.decode() if isinstance(name, bytes) else str(name)
+        events += [(float(row[0]), name) for row in np.atleast_2d(nirs[key]["data"][()])]
+    return sorted(events)
+
+
 def load_mind_data(main_dir=DATA_ROOT / "mind", verbose=True):
     """Return ``{recording_name: record}`` for every SNIRF file in ``main_dir``."""
     outputs = {}
@@ -69,11 +81,14 @@ def load_mind_data(main_dir=DATA_ROOT / "mind", verbose=True):
         with h5py.File(path, "r") as f:
             data = f["nirs/data1/dataTimeSeries"][()] * TO_MOLAR          # time x 102: HbO of the 51 channels, then HbR
             time = f["nirs/data1/time"][()]
+            events = read_stim(f["nirs"])
         hbo, hbr = data[:, :51].T, data[:, 51:].T
         keep = np.flatnonzero(hbo.any(axis=1) | hbr.any(axis=1))         # drop channels without data (all zero)
         channel_xyz = np.array([(OPTODE_XYZ[s] + OPTODE_XYZ[d]) / 2 for s, d in pairs])  # midpoints
         record = hb_to_record(hbo[keep], hbr[keep], 1 / np.median(np.diff(time)), channel_xyz[keep],
-                              np.full(len(keep), SD_DISTANCE))
+                              np.full(len(keep), SD_DISTANCE),
+                              ch_names=[f"{s}_{d}" for s, d in np.array(pairs)[keep]],
+                              events=[(onset - time[0], name) for onset, name in events])
         record["subject_id"] = path.parts[-3]                            # sub-XX
         outputs[path.stem] = record
     if verbose:
