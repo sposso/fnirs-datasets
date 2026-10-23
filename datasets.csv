@@ -14,7 +14,7 @@ physionet_nback,pretraining,n-back,Cognitive,Working memory,Healthy,12,2.09,phys
 shin2018,pretraining,"Working memory, discrimination, word generation",Cognitive,Working memory,Healthy,26,40.16,shin2018,https://doc.ml.tu-berlin.de/simultaneous_EEG_NIRS/,https://doi.org/10.1038/sdata.2018.3
 symmetry_wm,pretraining,Symmetry in visual working memory,Cognitive,Working memory,Healthy,26,22.14,symmetry_wm,https://doi.org/10.17605/OSF.IO/Z7KW3,https://doi.org/10.1038/s41598-024-84988-8
 pipa_music,pretraining,Empathy and Pipa music,Emotion,Emotion induction,Healthy,45,26.86,pipa_music,https://doi.org/10.57760/sciencedb.14924,https://doi.org/10.12074/202411.00062
-refed,pretraining,Emotional film clips,Emotion,Emotion induction,Healthy,32,13.65,refed,https://huggingface.co/datasets/REFED2025/REFED-dataset,
+refed,pretraining,Emotional film clips,Emotion,Emotion induction,Healthy,32,13.65,refed,https://huggingface.co/datasets/REFED2025/REFED-dataset,https://neurips.cc/virtual/2025/poster/121785
 emotion_reappraisal,pretraining,Detached and positive reappraisal,Emotion,Emotion regulation,Healthy,25,17.95,emotion_reappraisal,https://doi.org/10.57760/sciencedb.13806,https://doi.org/10.2139/ssrn.5163908
 athlete,pretraining,Exercise-induced hypoalgesia,Motor,Exercise and pain stimulation,Healthy,42,27.67,athletes,https://doi.org/10.18112/openneuro.ds006902.v1.1.1,
 fog_parkinson,pretraining,Freezing of gait in Parkinson's disease,Motor,Gait,"PD, healthy controls",44,21.13,fog_parkinson,https://doi.org/10.34973/k7ce-6n58,https://doi.org/10.1093/braincomms/fcae259
@@ -49,7 +49,7 @@ cocktail_party,pretraining,Cocktail-party spatial attention,Speech,Auditory perc
 interaural_coherence,pretraining,Interaural coherence of sounds,Speech,Auditory perception,Healthy,20,18.91,interaural_coherence,https://osf.io/tyzag/,https://doi.org/10.1016/j.isci.2022.104181
 voice_pitch,pretraining,Voice pitch changes,Speech,Auditory perception,Healthy,20,21.22,voice_pitch,https://osf.io/ps47b,https://doi.org/10.1016/j.heares.2022.108483
 alice,pretraining,Naturalistic story listening,Speech,Language processing,Healthy children,51,10.65,alice_story,https://doi.org/10.7302/zw4w-hp67,https://doi.org/10.1093/scan/nsaf022
-audio_visual_speech,pretraining,Auditory-only and visual-only speech,Speech,Language processing,Healthy,8,4.41,audio_visual_speech,https://osf.io/xwerv (mne_nirs.datasets.audio_or_visual_speech),https://doi.org/10.1016/j.heares.2021.108256
+audio_visual_speech,pretraining,Auditory-only and visual-only speech,Speech,Language processing,Healthy,8,4.41,audio_visual_speech,https://osf.io/xwerv,https://doi.org/10.1016/j.heares.2021.108256
 lexical_retest,pretraining,Test–retest lexical decision,Speech,Language processing,Healthy,27,31.15,lexical_retest,https://doi.org/10.5683/SP4/MXMU9I,https://doi.org/10.64898/2026.07.14.737938
 morphology,pretraining,Morphological and phonological processing,Speech,Language processing,Healthy children,341,120.4,morphology,https://doi.org/10.7302/gg8n-mq88,https://doi.org/10.1016/j.dib.2022.108048
 prosody,pretraining,Sentence-level prosodic processing,Speech,Language processing,"Normal hearing, CI users",76,30.37,prosody,https://doi.org/10.7302/xj95-gv44,https://doi.org/10.1044/2022_JSLHR-22-00103
