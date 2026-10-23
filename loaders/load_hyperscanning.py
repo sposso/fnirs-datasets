@@ -2,6 +2,7 @@
 Hakim, U., Noah, J. A., Zhang, X., Gunasekara, N., Hamilton, A., Pinti, P., Tachtsidis, I., Hirsch, J.
 (2026). Investigating face processing in online interactions via UK-US hyperscanning using fNIRS.
 Imaging Neuroscience 4. doi:10.1162/IMAG.a.1101. Data: Dryad doi:10.5061/dryad.2ngf1vj10
+(the extracted hyper_ folder is the dataset folder).
 
 40 participants (20 dyads, one partner at Yale and one at UCL) gazing at their partner's face over Zoom,
 live or as a static photo. Shimadzu LABNIRS (780/805/830 nm):

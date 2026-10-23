@@ -67,8 +67,7 @@ These are listed in `requirements-optional.txt`.
    export FNIRS_DATA_ROOT=/path/to/fnirs_data
    ```
 2. For each dataset you need, download it from `data_source` in `datasets.csv` into `$FNIRS_DATA_ROOT/<folder>`.
-   `expected_files` gives the layout the loader reads inside that folder, and `download_notes` says which part of
-   the download to use when it is not the top level.
+   Each loader's docstring says which files it reads inside that folder.
 3. A few datasets need a one-off conversion or fix before they can be loaded. The original files are never modified.
 
 | Dataset | Download to | Then run | Why |

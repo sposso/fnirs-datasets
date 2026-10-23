@@ -3,7 +3,7 @@ Mutlu, M.C., Canbeyli, R., Saybaşılı, H. (2023). Functional near-infrared spe
 clauses are more difficult to process than subject relative clauses in Turkish. European Journal of Neuroscience 57(6),
 951-961. doi:10.1111/ejn.15930.
 Data: figshare doi:10.6084/m9.figshare.21923175 (v1, CC BY 4.0; MD5 checked): one raw SNIRF file per participant
-(converted from .nirs without preprocessing).
+(converted from .nirs without preprocessing); the inner 'Turkish Relative Dataset/' folder is the dataset folder.
 
 14 native Turkish speakers answered yes/no questions about 24 sentences containing a subject- or object-relative
 clause (one recording of 6.9-7.4 min each); the file of subject 6 was damaged and is not shared: 13 recordings.

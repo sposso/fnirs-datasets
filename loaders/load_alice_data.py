@@ -2,7 +2,7 @@
 Yu, C.-L., Eggleston, R., Zhang, K., Nickerson, N., Sun, X., Marks, R. A., Hu, X., Brennan, J. R., Wellman, H. M.,
 Kovelman, I. (2025). Neural processing of children's theory of mind in a naturalistic story-listening paradigm.
 Social Cognitive and Affective Neuroscience 20(1), nsaf022. doi:10.1093/scan/nsaf022.
-Data: Deep Blue Data, doi:10.7302/zw4w-hp67.
+Data: Deep Blue Data, doi:10.7302/zw4w-hp67 (the NIRSfiles/ folder of the download is the dataset folder).
 
 51 children (5.6-11.97 years) listened to the first chapter of Alice's Adventures in Wonderland (12.4 min); one
 recording each (12.3-13.0 min), kept whole. TechEn CW6, 690/830 nm, 50 Hz.
