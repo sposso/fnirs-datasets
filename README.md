@@ -5,10 +5,6 @@ recordings from 2,798 participants. Each recording becomes HbO and HbR concentra
 position of every channel. Of the 67, 61 datasets form a pretraining corpus and 6 are held out as downstream tasks
 with labeled epochs. The repository gives a download link for every dataset.
 
-The goal is to make foundation models for fNIRS easier to build: pretraining needs many datasets pooled together,
-and pooling fNIRS datasets needs a common format and a common spatial reference for channels. This repository
-provides both, together with a fixed benchmark to compare models on.
-
 - **Pretraining corpus:** 61 datasets, 2,577 participants, 1,835.88 hours.
 - **Downstream tasks:** 6 held-out datasets, 221 participants, 118.96 hours, with labeled epochs.
 
@@ -97,7 +93,7 @@ Every dataset with its paper and its data record. The participants and hours of 
 
 1. **Attention tasks after brain injury** — Cortical activation and functional connectivity during different attention tasks using functional near-infrared spectroscopy in middle-aged and elderly people (Ding et al., 2025). [Paper](https://doi.org/10.1186/s40001-025-02597-1) · [Data](https://doi.org/10.17632/7tcrj59w2p.1)
 2. **Post-error multitasking** — The Neurophysiological Mechanisms of Post-Error Responses in Multitasking Scenarios (Zhu et al., 2025). [Data](https://doi.org/10.57760/sciencedb.28380)
-3. **Word–color Stroop** — High-density multidistance fNIRS enhances detection of brain activity during a word-color Stroop task (Anderson et al., 2025). [Paper](https://doi.org/10.1117/1.NPh.12.3.035010) · [Data](https://doi.org/10.18112/openneuro.ds006460.v1.0.0) · [Data](https://doi.org/10.18112/openneuro.ds006459.v1.0.1)
+3. **Word–color Stroop** — High-density multidistance fNIRS enhances detection of brain activity during a word-color Stroop task (Anderson et al., 2025). [Paper](https://doi.org/10.1117/1.NPh.12.3.035010) · [Data, HD array](https://doi.org/10.18112/openneuro.ds006460.v1.0.0) · [Data, sparse array](https://doi.org/10.18112/openneuro.ds006459.v1.0.1)
 4. **Visuomotor target identification** — Simultaneous Dataset of Brain, Eye and Hand during Visuomotor Tasks (Zhang et al., 2025). [Paper](https://doi.org/10.1038/s41597-024-04227-7) · [Data](https://doi.org/10.17605/OSF.IO/CFDSZ)
 5. **AI persuasion** — Wired to believe: source-authority cues shape perceived AI capability and neural persuasion (Ding et al., 2026). [Paper](https://doi.org/10.1080/00140139.2026.2734930) · [Data](https://doi.org/10.57760/sciencedb.42071)
 6. **Real use of a cosmetic product** — Willingness-to-pay-associated right prefrontal activation during a single, real use of cosmetics as revealed by functional near-infrared spectroscopy (Kawabata Duncan et al., 2019). [Paper](https://doi.org/10.3389/fnhum.2019.00016) · [Data](https://doi.org/10.6084/m9.figshare.7409834)
