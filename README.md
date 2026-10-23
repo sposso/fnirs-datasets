@@ -1,9 +1,9 @@
 # fnirs-datasets
 
 Loaders for 67 public fNIRS datasets in one common format with channel positions in MNI space: 1,954.84 hours of
-recordings from 2,798 participants. Each recording becomes HbO and HbR concentration changes at 7.5 Hz, with the MNI
-position of every channel. Of the 67, 61 datasets form a pretraining corpus and 6 are held out as downstream tasks
-with labeled epochs. The repository gives a download link for every dataset.
+recordings from 2,798 participants. Each recording becomes HbO and HbR concentration changes at 7.5 Hz. Of the 67,
+61 datasets form a pretraining corpus and 6 are held out as downstream tasks with labeled epochs. The repository
+gives a download link for every dataset.
 
 - **Pretraining corpus:** 61 datasets, 2,577 participants, 1,835.88 hours.
 - **Downstream tasks:** 6 held-out datasets, 221 participants, 118.96 hours, with labeled epochs.
@@ -27,6 +27,8 @@ with labeled epochs. The repository gives a download link for every dataset.
 
 ## Installation
 
+Python 3.10 or later.
+
 ```bash
 git clone https://github.com/sposso/fnirs-datasets.git && cd fnirs-datasets
 pip install -r requirements.txt
@@ -34,9 +36,10 @@ pip install -r requirements.txt
 
 ## Getting the data
 
-The data are not redistributed. `datasets.csv` gives the download link of every dataset. Download each dataset
-into `$FNIRS_DATA_ROOT/<folder>`; see [docs/getting_data.md](docs/getting_data.md) for the few datasets that need
-a conversion step first.
+The data are not redistributed. `datasets.csv` gives the download link (`data_source`) and the folder name
+(`folder`) of every dataset. Set the environment variable `FNIRS_DATA_ROOT` to your data directory (default:
+`./data`) and download each dataset into `$FNIRS_DATA_ROOT/<folder>`. A few datasets need a conversion step
+first; see [docs/getting_data.md](docs/getting_data.md).
 
 ## Usage
 
@@ -48,19 +51,22 @@ recording_id, record = next(iter(records.items()))
 record["data"].shape                     # (channels, 2, samples): [HbO, HbR] in M, 7.5 Hz
 ```
 
-The dataset names are the keys of `loaders.PRETRAINING` and `loaders.DOWNSTREAM`. Each record holds:
+`load()` takes the `name` column of `datasets.csv` (also the keys of `loaders.PRETRAINING` and
+`loaders.DOWNSTREAM`). Each record holds:
 
 | Key | Content |
 |---|---|
-| `data` | `(C, 2, T)` array: HbO and HbR concentration changes (M) of `C` channels at 7.5 Hz |
+| `data` | `(C, 2, T)` array: HbO and HbR concentration changes (M) of `C` channels |
+| `sfreq` | sampling rate, 7.5 Hz |
 | `channel_xyz` | `(C, 3)` channel positions (source-detector midpoints) in MNI space, meters |
 | `sd_distances` | `(C,)` source-detector distances, meters |
 | `ch_names` | channel names, e.g. `"S1_D1"` |
-| `events` | `[(onset s, name), ...]` |
+| `events` | `[(onset s, name), ...]`, the markers of the recording |
 | `subject_id` | participant identifier |
 
-Downstream records add two keys: `epochs`, an `(n, C, 2, T)` array with one epoch per trial of the task, and
-`labels`, the class of each epoch (for example `animal` or `tool`). See `examples/downstream_epochs.py`.
+Downstream records add `epochs`, an `(n, C, 2, T)` array with one epoch per trial of the task, and `labels`, the
+class of each epoch (for example `animal` or `tool`). The three tasks labeled by participant group also carry
+`group`. See `examples/downstream_epochs.py`.
 
 ## Processing
 
@@ -71,7 +77,7 @@ applied. Details, including how each dataset's positions were brought to MNI spa
 
 ## Downstream tasks
 
-| Task | Classes | Epoch | Name |
+| Task | Classes | Epoch | Dataset `name` |
 |---|---|---|---|
 | ICH | healthy vs. ICH | 10-s motor imagery | `hefmi_ich` |
 | CI status | normal hearing vs. cochlear implant | 13-s sentence | `speech_comprehension` |
