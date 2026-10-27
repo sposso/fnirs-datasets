@@ -1,7 +1,7 @@
 # fnirs-datasets
 
 Loaders for 67 public fNIRS datasets in one common format with channel positions in MNI space: 1,954.84 hours of
-recordings from 2,798 participants. Each recording becomes HbO and HbR concentration changes at 7.5 Hz. Of the 67,
+recordings from 2,798 participants. Each recording has HbO and HbR concentration changes at 7.5 Hz. Of the 67,
 61 datasets form a pretraining corpus and 6 are held out as downstream tasks with labeled epochs. The repository
 gives a download link for every dataset.
 
@@ -36,8 +36,7 @@ pip install -r requirements.txt
 
 ## Getting the data
 
-The data are not redistributed. `datasets.csv` gives the download link (`data_source`) and the folder name
-(`folder`) of every dataset. Set the environment variable `FNIRS_DATA_ROOT` to your data directory (default:
+ Set the environment variable `FNIRS_DATA_ROOT` to your data directory (default:
 `./data`) and download each dataset into `$FNIRS_DATA_ROOT/<folder>`. A few datasets need a conversion step
 first; see [docs/getting_data.md](docs/getting_data.md).
 
@@ -51,8 +50,7 @@ recording_id, record = next(iter(records.items()))
 record["data"].shape                     # (channels, 2, samples): [HbO, HbR] in M, 7.5 Hz
 ```
 
-`load()` takes the `name` column of `datasets.csv` (also the keys of `loaders.PRETRAINING` and
-`loaders.DOWNSTREAM`). Each record holds:
+ Each record holds:
 
 | Key | Content |
 |---|---|
@@ -64,14 +62,12 @@ record["data"].shape                     # (channels, 2, samples): [HbO, HbR] in
 | `events` | `[(onset s, name), ...]`, the markers of the recording |
 | `subject_id` | participant identifier |
 
-Downstream records add `epochs`, an `(n, C, 2, T)` array with one epoch per trial of the task, and `labels`, the
-class of each epoch (for example `animal` or `tool`). The three tasks labeled by participant group also carry
-`group`. See `examples/downstream_epochs.py`.
+Downstream records includes trials  and `labels`.
 
 ## Processing
 
-The same minimal pipeline for every dataset: optical density → HbO/HbR (modified Beer–Lambert law), high-pass
-filter at 0.01 Hz, resampling to 7.5 Hz. No channel is rejected for signal quality and no motion correction is
+The same minimal pipeline for every dataset: raw signal  →  optical density → HbO/HbR (modified Beer–Lambert law), high-pass
+filter at 0.01 Hz, resampling to 7.5 Hz. No channel is rejected for signal quality under our own criteria and no motion correction is
 applied. Details, including how each dataset's positions were brought to MNI space, are in
 [docs/processing.md](docs/processing.md) and in each loader's docstring.
 
@@ -88,7 +84,7 @@ applied. Details, including how each dataset's positions were brought to MNI spa
 
 ## Rejected datasets
 
-24 more datasets were reviewed and not used, mainly for lacking 3D optode positions. Their loaders and the reasons
+15 more datasets were reviewed and not used, mainly for lacking 3D optode positions. Their loaders and the reasons
 are in [rejected/REJECTED.md](rejected/REJECTED.md).
 
 ## Datasets
