@@ -1,12 +1,12 @@
 # fnirs-datasets
 
-Loaders for 67 public fNIRS datasets in one common format with channel positions in MNI space: 1,954.84 hours of
+Loaders for 67 public fNIRS datasets in one common format with channel positions in MNI space. Together, these datasets comprises 1,955 hours of
 recordings from 2,798 participants. Each recording has HbO and HbR concentration changes at 7.5 Hz. Of the 67,
 61 datasets form a pretraining corpus and 6 are held out as downstream tasks with labeled epochs. The repository
 gives a download link for every dataset.
 
-- **Pretraining corpus:** 61 datasets, 2,577 participants, 1,835.88 hours.
-- **Downstream tasks:** 6 held-out datasets, 221 participants, 118.96 hours, with labeled epochs.
+- **Pretraining corpus:** 61 datasets, 2,577 participants, 1,836 hours.
+- **Downstream tasks:** 6 held-out datasets, 221 participants, 119 hours, with labeled epochs.
 
 > Paper: *coming soon*. Please cite it, and every dataset you use (see [Citation](#citation)).
 
