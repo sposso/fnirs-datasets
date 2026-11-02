@@ -8,7 +8,7 @@ gives a download link for every dataset.
 - **Pretraining corpus:** 61 datasets, 2,577 participants, 1,836 hours.
 - **Downstream tasks:** 6 held-out datasets, 221 participants, 119 hours, with labeled epochs.
 
-> Paper: *coming soon*. Please cite it, and every dataset you use (see [Citation](#citation)).
+> Paper: *Towards fNIRS foundation models: A curated corpus of 67 public datasets with channel positions in MNI space*. Please cite it, and every dataset you use (see [Citation](#citation)).
 
 ## Corpus overview
 
@@ -166,8 +166,14 @@ Every dataset with its paper and its data record. The participants and hours of 
 
 ## Citation
 
-Please cite our paper (BibTeX coming soon) and each dataset you use; the data record and paper of every dataset are
-in `datasets.csv`.
+
+```bibtex
+@article{posso2026towards,
+  title={Towards fNIRS foundation models: A curated corpus of 67 public datasets with channel positions in MNI space},
+  author={Posso-Murillo, Santiago},
+  journal={arXiv preprint arXiv:2610.40277},
+  year={2026}
+}
 
 ## License
 
