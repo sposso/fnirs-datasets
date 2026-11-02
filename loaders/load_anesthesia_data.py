@@ -28,7 +28,8 @@ def load_anesthesia_data(main_dir=DATA_ROOT / "anesthesia", verbose=True):
         sfreq = raw.info["sfreq"]
         raw = fill_or_drop(raw, max_gap=round(sfreq), max_edge=round(60 * sfreq))  # 1-s gaps, 1-min start/end
         record = raw_to_record(raw)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])          # file positions are CapTrak
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])          # file positions are CapTrak
         record["subject_id"] = path.name.split("_")[0]                      # sub-02 ... sub-11
         outputs[path.stem] = record
     if verbose:

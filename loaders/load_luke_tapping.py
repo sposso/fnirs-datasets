@@ -19,7 +19,8 @@ def load_luke_tapping_data(main_dir=DATA_ROOT / "luke_tapping", verbose=True):
     outputs = {}
     for path in sorted(Path(main_dir).glob("sub-*/nirs/*.snirf")):
         record = snirf_to_record(path)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])  # file positions are CapTrak
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])  # file positions are CapTrak
         record["subject_id"] = path.name.split("_")[0]               # e.g. sub-01
         outputs[path.stem] = record
     if verbose:

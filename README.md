@@ -57,6 +57,7 @@ record["data"].shape                     # (channels, 2, samples): [HbO, HbR] in
 | `data` | `(C, 2, T)` array: HbO and HbR concentration changes (M) of `C` channels |
 | `sfreq` | sampling rate, 7.5 Hz |
 | `channel_xyz` | `(C, 3)` channel positions (source-detector midpoints) in MNI space, meters |
+| `source_xyz`, `detector_xyz` | `(C, 3)` source and detector positions in MNI space, meters; NaN in datasets that give only channel positions |
 | `sd_distances` | `(C,)` source-detector distances, meters |
 | `ch_names` | channel names, e.g. `"S1_D1"` |
 | `events` | `[(onset s, name), ...]`, the markers of the recording |

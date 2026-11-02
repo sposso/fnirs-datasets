@@ -78,7 +78,7 @@ def load_visuomotor_data(main_dir=DATA_ROOT / "visuomotor", verbose=True):
         raw = fill_or_drop(make_raw(data, keep), MAX_GAP, MAX_EDGE)
         if raw is None:                                                     # no channel left
             continue
-        record = raw_to_record(raw)
+        record = raw_to_record(raw, sd_geometry=False)    # optode positions are placeholders
         record["subject_id"] = subject
         outputs[subject] = record
     if verbose:

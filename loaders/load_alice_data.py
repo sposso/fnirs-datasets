@@ -35,7 +35,7 @@ def load_alice_data(main_dir=DATA_ROOT / "alice_story", verbose=True):
         raw = read_raw(path, mni=CHANNEL_MNI)
         sfreq = raw.info["sfreq"]
         raw = fill_or_drop(raw, max_gap=round(sfreq), max_edge=round(60 * sfreq))  # 1-s gaps, 1-min start/end
-        record = raw_to_record(raw)
+        record = raw_to_record(raw, sd_geometry=False)    # optode positions are placeholders
         record["subject_id"] = path.stem.split("_")[0]                   # e.g. 1094
         outputs[path.stem] = record
     if verbose:

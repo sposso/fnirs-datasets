@@ -50,7 +50,8 @@ def load_lexical_retest_data(main_dir=DATA_ROOT / "lexical_retest", verbose=True
         if raw is None:
             continue
         record = raw_to_record(raw)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])          # file positions are CapTrak
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])          # file positions are CapTrak
         record["subject_id"] = subject
         outputs[path.name.removesuffix("_nirs.snirf")] = record
     if verbose:

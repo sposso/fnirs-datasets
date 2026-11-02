@@ -24,7 +24,7 @@ def load_prosody_data(main_dir=DATA_ROOT / "prosody/fNIRS data", verbose=True):
         raw = read_raw(path)
         sfreq = raw.info["sfreq"]
         raw = fill_or_drop(raw, max_gap=round(sfreq), max_edge=round(60 * sfreq))  # 1-s gaps, 1-min start/end
-        record = raw_to_record(raw)
+        record = raw_to_record(raw, sd_geometry=False)    # optode positions are placeholders
         group, task, number = path.stem.split("_")                       # e.g. NHA, Intonation, CCI005
         record["subject_id"] = f"{group}_{number}"
         outputs[path.stem] = record

@@ -47,7 +47,7 @@ def snirf_to_record(snirf_path, verbose=False, **options):
 
 def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
                   drop_pairs=(), optode_xyz=None, fix_file_positions=False,
-                  channel_pos=None, sd_distance=None, allow_2d=False, verbose=False):
+                  channel_pos=None, sd_distance=None, allow_2d=False, sd_geometry=True, verbose=False):
     """Turn raw light intensity (an MNE Raw) into a record with ``data`` shaped (C, 2, T) = [HbO, HbR].
 
     ``drop_pairs``: source-detector pairs removed before processing, e.g. ``{"S9_D12"}``.
@@ -62,6 +62,8 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
         ``{"S1_D1": metres}`` per channel), when the real distance is known but the stored positions
         (e.g. a template) do not give it. Each channel keeps its midpoint and direction; only its length changes.
     ``allow_2d``: accept flat 2D positions (rejected datasets, whose positions are kept as provided).
+    ``sd_geometry``: whether the source and detector positions in the Raw are real. ``source_xyz`` and
+        ``detector_xyz`` are returned only then (and not with ``channel_pos``); otherwise they are NaN.
     """
     raw.drop_channels([ch for ch in raw.ch_names if ch.split(" ")[0] in drop_pairs])
     if fix_file_positions:
@@ -87,8 +89,12 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
     if optode_xyz is not None:
         set_optode_positions(haemo.info, optode_xyz)
     channel_xyz = np.array([haemo.info["chs"][p]["loc"][:3] for p in hbo])  # midpoints, metres
+    source_xyz = np.array([haemo.info["chs"][p]["loc"][3:6] for p in hbo])
+    detector_xyz = np.array([haemo.info["chs"][p]["loc"][6:9] for p in hbo])
     if channel_pos is not None:
         channel_xyz = np.array([channel_pos[haemo.ch_names[p].split(" ")[0]] for p in hbo])
+    if channel_pos is not None or not sd_geometry:
+        source_xyz = detector_xyz = np.full_like(channel_xyz, np.nan)
 
     if not allow_2d and np.all(np.abs(channel_xyz[:, 2]) < 1e-8):
         raise ValueError(f"{raw.filenames[0]}: channel positions are 2D-only")
@@ -99,20 +105,23 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
         "data": data,
         "sfreq": haemo.info["sfreq"],
         "channel_xyz": channel_xyz,
+        "source_xyz": source_xyz,
+        "detector_xyz": detector_xyz,
         "sd_distances": sd_distances,
         "ch_names": [haemo.ch_names[p].split(" ")[0] for p in hbo],           # e.g. "S1_D1"
         "events": list(zip(event_onsets(haemo).tolist(), haemo.annotations.description.tolist())),  # (onset s, name)
     }
 
 
-def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, events=(), l_freq=L_FREQ,
-                 target_sfreq=TARGET_SFREQ, verbose=False):
+def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, events=(), source_xyz=None,
+                 detector_xyz=None, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ, verbose=False):
     """Build a record from HbO and HbR already computed by the device software, shaped (C, T) each, in M.
 
     For datasets that share no raw intensity. Only the high-pass and resampling of
     ``snirf_to_record`` are applied; ``channel_xyz`` (metres) and ``sd_distances`` (metres) are given
     (``channel_xyz`` is None for rejected datasets that provide no positions). ``ch_names`` defaults to
-    CH1..CHn and ``events`` to none; both are returned as in ``raw_to_record``.
+    CH1..CHn and ``events`` to none; both are returned as in ``raw_to_record``. ``source_xyz`` and
+    ``detector_xyz`` (metres) default to NaN, since these datasets give only channel positions.
     """
     n = len(hbo)
     ch_names = [f"CH{i + 1}" for i in range(n)] if ch_names is None else list(ch_names)
@@ -125,10 +134,13 @@ def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, even
     channel_xyz = None if channel_xyz is None else np.asarray(channel_xyz, dtype=float)
     if not (np.isfinite(data).all() and (channel_xyz is None or np.isfinite(channel_xyz).all())):
         raise ValueError("non-finite values in data or channel positions")
+    nan = np.full((n, 3), np.nan)
     return {
         "data": data,
         "sfreq": haemo.info["sfreq"],
         "channel_xyz": channel_xyz,
+        "source_xyz": nan if source_xyz is None else np.asarray(source_xyz, dtype=float),
+        "detector_xyz": nan if detector_xyz is None else np.asarray(detector_xyz, dtype=float),
         "sd_distances": np.asarray(sd_distances, dtype=float),
         "ch_names": ch_names,
         "events": [(float(onset), str(name)) for onset, name in events],  # (onset s, name)

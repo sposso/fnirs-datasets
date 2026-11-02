@@ -29,7 +29,8 @@ def load_symmetry_wm_data(main_dir=DATA_ROOT / "symmetry_wm", verbose=True):
         if subject not in included:
             continue
         record = snirf_to_record(path)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])          # file positions are CapTrak
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])          # file positions are CapTrak
         record["subject_id"] = subject
         outputs[path.stem] = record
     if verbose:

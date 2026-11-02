@@ -70,7 +70,7 @@ def load_shin2018_data(main_dir=DATA_ROOT / "shin2018", verbose=True):
     for sub_dir in sorted(Path(main_dir).glob("VP0??")):                         # VP001 ... VP026 (not the .zip files)
         tasks = TASKS_VP001_VP002 if sub_dir.name in ("VP001", "VP002") else TASKS
         for k, folder in enumerate(sorted(p for p in sub_dir.iterdir() if p.is_dir())):
-            record = raw_to_record(read_session(folder))
+            record = raw_to_record(read_session(folder), sd_geometry=False)   # optode positions are placeholders
             record["subject_id"] = sub_dir.name                                  # VP0XX
             outputs[f"{sub_dir.name}_{tasks[k]}_{k % 3 + 1}"] = record           # e.g. VP001_dsr_1
     if verbose:

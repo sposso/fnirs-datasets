@@ -50,7 +50,8 @@ def load_pipa_music_data(main_dir=DATA_ROOT / "pipa_music", verbose=True):
     for number, folder in sorted(folders.items()):
         raw = read_nirstar_folder(folder)
         record = raw_to_record(raw)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])          # MNE head frame -> template MNI
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])          # MNE head frame -> template MNI
         record["subject_id"] = f"sub-{number:02d}"
         outputs[f"sub-{number:02d}_{next(folder.glob('*.wl1')).stem}"] = record
     if verbose:

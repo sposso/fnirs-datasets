@@ -27,7 +27,8 @@ def load_finemi_data(main_dir=DATA_ROOT / "finemi", verbose=True):
         sfreq = raw.info["sfreq"]
         raw = fill_or_drop(raw, max_gap=round(sfreq), max_edge=round(60 * sfreq))  # 1-s gaps, 1-min start/end
         record = raw_to_record(raw)
-        record["channel_xyz"] = head_to_mni(record["channel_xyz"])          # file positions are CapTrak
+        for key in ("channel_xyz", "source_xyz", "detector_xyz"):
+            record[key] = head_to_mni(record[key])          # file positions are CapTrak
         subject = folder.parts[-3]                                          # subject1 ... subject18
         record["subject_id"] = subject
         outputs[f"{subject}_{folder.name}"] = record                         # e.g. subject1_block1-4
