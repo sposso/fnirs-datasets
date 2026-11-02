@@ -64,8 +64,14 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
     ``allow_2d``: accept flat 2D positions (rejected datasets, whose positions are kept as provided).
     ``sd_geometry``: whether the source and detector positions in the Raw are real. ``source_xyz`` and
         ``detector_xyz`` are returned only then (and not with ``channel_pos``); otherwise they are NaN.
+    The record also keeps the signal as read from the file, before any conversion: ``raw_signal`` (M, T) at
+    ``raw_sfreq`` Hz, one row per source-detector pair and wavelength named in ``raw_names`` (e.g. "S1_D1 760"),
+    with ``raw_kind`` "intensity" or "od" ("hb" with the device's HbO/HbR rows "S1_D1 hbo"/"S1_D1 hbr" in
+    ``hb_to_record``).
     """
     raw.drop_channels([ch for ch in raw.ch_names if ch.split(" ")[0] in drop_pairs])
+    raw_signal = raw.get_data()                                              # the file's signal, as read: (M, T)
+    raw_kind = "od" if "fnirs_od" in raw.get_channel_types() else "intensity"
     if fix_file_positions:
         set_optode_positions(raw.info, optode_xyz)
     if sd_distance is not None:
@@ -110,6 +116,10 @@ def raw_to_record(raw, ppf=PPF, l_freq=L_FREQ, target_sfreq=TARGET_SFREQ,
         "sd_distances": sd_distances,
         "ch_names": [haemo.ch_names[p].split(" ")[0] for p in hbo],           # e.g. "S1_D1"
         "events": list(zip(event_onsets(haemo).tolist(), haemo.annotations.description.tolist())),  # (onset s, name)
+        "raw_signal": raw_signal,
+        "raw_names": list(raw.ch_names),
+        "raw_sfreq": raw.info["sfreq"],
+        "raw_kind": raw_kind,
     }
 
 
@@ -126,8 +136,9 @@ def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, even
     n = len(hbo)
     ch_names = [f"CH{i + 1}" for i in range(n)] if ch_names is None else list(ch_names)
     names = [f"{c} hbo" for c in ch_names] + [f"{c} hbr" for c in ch_names]
+    raw_signal = np.concatenate([hbo, hbr])                                 # the device's HbO/HbR, as given: (2C, T)
     info = mne.create_info(names, sfreq, ["hbo"] * n + ["hbr"] * n)
-    haemo = mne.io.RawArray(np.concatenate([hbo, hbr]), info, verbose=verbose)
+    haemo = mne.io.RawArray(raw_signal.copy(), info, verbose=verbose)
     highpass_and_resample(haemo, l_freq, target_sfreq, verbose)
     data = haemo.get_data().reshape(2, n, -1).transpose(1, 0, 2)  # (C, 2, T)
 
@@ -144,6 +155,10 @@ def hb_to_record(hbo, hbr, sfreq, channel_xyz, sd_distances, ch_names=None, even
         "sd_distances": np.asarray(sd_distances, dtype=float),
         "ch_names": ch_names,
         "events": [(float(onset), str(name)) for onset, name in events],  # (onset s, name)
+        "raw_signal": raw_signal,                                         # device HbO/HbR (M) at the native rate
+        "raw_names": names,
+        "raw_sfreq": sfreq,
+        "raw_kind": "hb",
     }
 
 
