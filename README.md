@@ -175,6 +175,4 @@ Every dataset with its paper and its data record. The participants and hours of 
   year={2026}
 }
 
-## License
 
-The code is under the MIT License. The datasets keep the licenses of their original repositories.
