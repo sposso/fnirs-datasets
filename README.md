@@ -8,7 +8,7 @@ gives a download link for every dataset.
 - **Pretraining corpus:** 61 datasets, 2,577 participants, 1,836 hours.
 - **Downstream tasks:** 6 held-out datasets, 221 participants, 119 hours, with labeled epochs.
 
-> Paper: *Towards fNIRS foundation models: A curated corpus of 67 public datasets with channel positions in MNI space*.(see [Citation](#citation)).
+> [Paper](https://arxiv.org/abs/2610.40277): *Towards fNIRS foundation models: A curated corpus of 67 public datasets with channel positions in MNI space*.(see [Citation](#citation)).
 
 ## Corpus overview
 
