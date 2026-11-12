@@ -1,8 +1,9 @@
 # fnirs-datasets
 
 <p align="center">
-  <a href="https://arxiv.org/pdf/2610.40277"><img src="https://img.shields.io/badge/📄_Paper-arXiv_2610.40277-b31b1b?style=for-the-badge" alt="Paper"></a>
-  <a href="https://huggingface.co/datasets/sposso22/fnirs-datasets"><img src="https://img.shields.io/badge/🤗_Dataset-Hugging_Face-ffd21e?style=for-the-badge" alt="Hugging Face dataset"></a>
+  <a href="https://arxiv.org/pdf/2610.40277"><img src="docs/assets/paper.svg" alt="Paper"></a>
+  &nbsp;
+  <a href="https://huggingface.co/datasets/sposso22/fnirs-datasets"><img src="docs/assets/dataset.svg" alt="Hugging Face dataset"></a>
 </p>
 
 Loaders for 67 public fNIRS datasets in one common format with channel positions in MNI space. Together, these datasets comprises 1,955 hours of
