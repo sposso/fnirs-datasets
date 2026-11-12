@@ -89,6 +89,8 @@ def card(table, bib):
         return "\n".join(f"  - split: {role}\n    path:\n" + "\n".join(f"    - {pattern.format(n)}" for n in names)
                          for role, names in [("pretraining", pre["name"]), ("downstream", down["name"])])
 
+    tasks = "".join(f"- config_name: {n}\n  data_files: data/{n}/*.parquet\n" for n in down["name"])   # one subset per task
+
     return f"""---
 license:
 - cc-by-nc-sa-4.0
@@ -110,7 +112,7 @@ configs:
 - config_name: recordings
   data_files:
 {splits("meta/recordings/{}.parquet")}
----
+{tasks}---
 
 # fNIRS datasets
 
@@ -129,11 +131,12 @@ from datasets import load_dataset
 ds = load_dataset("{REPO}", split="pretraining")                                     # pretraining datasets
 ds = load_dataset("{REPO}", split="downstream")                                      # downstream datasets
 ds = load_dataset("{REPO}", data_files="data/fresh_motor/*.parquet", split="train")  # one dataset
+ds = load_dataset("{REPO}", "mirror", split="train")                      # one downstream task
 ```
 
 Subsets: `all` (default; one row per recording), `datasets` (one row per dataset), `recordings` (one row per
 recording, without signals). Splits of `all` and `recordings`: `pretraining` ({len(pre)} datasets) and
-`downstream` ({len(down)} held-out datasets).
+`downstream` ({len(down)} held-out datasets). Each downstream dataset is also its own subset, named after its folder (e.g. `mirror`), for task-by-task evaluation.
 
 ## Data fields
 
