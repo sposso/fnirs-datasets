@@ -41,6 +41,11 @@ SCHEMA = pa.schema([
     ("raw_sfreq", pa.float64()),
     ("raw_kind", pa.string()),                           # "intensity", "od" or "hb"
 ])
+META_SCHEMA = pa.schema([
+    ("recording_id", pa.string()), ("dataset", pa.string()), ("subject_id", pa.string()), ("n_channels", pa.int64()),
+    ("duration_s", pa.float64()), ("sfreq", pa.float64()), ("raw_kind", pa.string()), ("raw_sfreq", pa.float64()),
+    ("n_events", pa.int64()), ("event_names", pa.list_(pa.string())), ("file", pa.string()),
+])   # explicit, so that recordings without events do not give event_names a null type
 ARRAYS = ["hbo", "hbr", "channel_xyz", "source_xyz", "detector_xyz", "sd_distances", "raw_signal"]
 
 
@@ -125,7 +130,7 @@ def export(name, out):
             flush()
     if rows:
         flush()
-    pq.write_table(pa.Table.from_pylist(meta), out / "meta" / "recordings" / f"{name}.parquet")
+    pq.write_table(pa.Table.from_pylist(meta, schema=META_SCHEMA), out / "meta" / "recordings" / f"{name}.parquet")
 
     largest = check(records, folder)
     print(f"{name}: {len(records)} recordings in {shard} shard(s), all match the loader; "

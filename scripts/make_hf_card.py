@@ -84,6 +84,11 @@ def card(table, bib):
     by_sa = ", ".join(f"`{n}`" for n in table.loc[table["license_here"] == "CC BY-SA 4.0", "name"])
     pre, down = table[table["role"] == "pretraining"], table[table["role"] == "downstream"]
 
+    def splits(pattern):
+        """YAML data_files with one split per role: the folders of the pretraining and downstream datasets."""
+        return "\n".join(f"  - split: {role}\n    path:\n" + "\n".join(f"    - {pattern.format(n)}" for n in names)
+                         for role, names in [("pretraining", pre["name"]), ("downstream", down["name"])])
+
     return f"""---
 license:
 - cc-by-nc-sa-4.0
@@ -98,11 +103,13 @@ tags:
 configs:
 - config_name: all
   default: true
-  data_files: data/*/*.parquet
+  data_files:
+{splits("data/{}/*.parquet")}
 - config_name: datasets
   data_files: meta/datasets.parquet
 - config_name: recordings
-  data_files: meta/recordings/*.parquet
+  data_files:
+{splits("meta/recordings/{}.parquet")}
 ---
 
 # fNIRS datasets
@@ -119,12 +126,14 @@ positions in MNI space: {table['hours'].sum():,.0f} hours from {table['participa
 ```python
 from datasets import load_dataset
 
-ds = load_dataset("{REPO}", split="train")                                            # all recordings
+ds = load_dataset("{REPO}", split="pretraining")                                     # pretraining datasets
+ds = load_dataset("{REPO}", split="downstream")                                      # downstream datasets
 ds = load_dataset("{REPO}", data_files="data/fresh_motor/*.parquet", split="train")  # one dataset
 ```
 
 Subsets: `all` (default; one row per recording), `datasets` (one row per dataset), `recordings` (one row per
-recording, without signals).
+recording, without signals). Splits of `all` and `recordings`: `pretraining` ({len(pre)} datasets) and
+`downstream` ({len(down)} held-out datasets).
 
 ## Data fields
 
@@ -136,7 +145,7 @@ recording, without signals).
 | `channel_xyz` | channel positions (source–detector midpoints), MNI, meters |
 | `source_xyz`, `detector_xyz` | optode positions, MNI, meters; NaN when only channel positions are available |
 | `sd_distances` | source–detector distances, meters |
-| `events` | `onset` (s) and `name` of each marker |
+| `events` | `onset` (s) and `name` of each marker; complete for the downstream datasets, may be empty for pretraining datasets |
 | `raw_signal` | signal as stored in the source file, `(rows, samples)` at `raw_sfreq` |
 | `raw_names` | `raw_signal` row names: channel and wavelength (`S1_D1 760`) or chromophore (`S1_D1 hbo`) |
 | `raw_kind` | `intensity`, `od` (optical density) or `hb` (HbO/HbR from the device software) |
