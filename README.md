@@ -36,7 +36,9 @@ pip install -r requirements.txt
 
 ## Getting the data
 
- Set the environment variable `FNIRS_DATA_ROOT` to your data directory (default:
+The processed recordings (loader output) are on Hugging Face: [sposso22/fnirs-datasets](https://huggingface.co/datasets/sposso22/fnirs-datasets). To build them from the original files:
+
+Set the environment variable `FNIRS_DATA_ROOT` to your data directory (default:
 `./data`) and download each dataset into `$FNIRS_DATA_ROOT/<folder>`. A few datasets need a conversion step
 first; see [docs/getting_data.md](docs/getting_data.md).
 
